@@ -41,7 +41,7 @@ jobs:
             ${{ runner.os }}-yarn-
       - name: Lint project
         run: |
-            yarn lint
+            yarn lint --ignore-engines
   test:
     name: Test
     runs-on: ubuntu-latest
@@ -62,6 +62,6 @@ jobs:
           key: "${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}"
           restore-keys: |
             ${{ runner.os }}-yarn-
-      - name: Run test
+      - name: Run test --ignore-engines
         run: |
             yarn test
