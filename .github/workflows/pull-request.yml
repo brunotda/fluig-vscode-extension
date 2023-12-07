@@ -5,50 +5,32 @@ on:
     branches:
       - main
       - test
-
 jobs:
-  install:
+  code-quality:
+    name: Lint source code
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-        with:
-          clean: true
+    - uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '14'
-      - name: Cache dependencies
-        uses: actions/cache@v1
-        with:
-          path: ./node\_modules
-          key: ${{ runner.OS }}-dependencies-${{ hashFiles('\*\*/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.OS }}-dependencies-${{ env.cache-name }}-
-            ${{ runner.OS }}-dependencies-
-            ${{ runner.OS }}-
-      - name: Install Dependencies
-        run: npm install
-  danger-ci:
-    name: Danger CI
-    needs: install
-    runs-on: ubuntu-latest
-    steps:
-      - name: Run Changelog CI
-        uses: saadmk11/changelog-ci@v1.1.2
+    - name: Setup Node
+      uses: actions/setup-node@v3
+      with:
+        node-version: '14'
 
-  lint:
-    name: Lint
-    needs: install
-    runs-on: ubuntu-latest
-    steps:
-      - name: Lint project
-        run: npm run lint
-  test:
-    name: Test
-    needs: install
-    runs-on: ubuntu-latest
-    steps:
-      - name: Run test
-        run: npm run test
+    - name: Cache dependencies
+      uses: actions/cache@v3.3.2
+      with:
+        path: ./node\_modules
+        key: ${{ runner.OS }}-dependencies-${{ hashFiles('\*\*/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.OS }}-dependencies-${{ env.cache-name }}-
+          ${{ runner.OS }}-dependencies-
+          ${{ runner.OS }}-
+
+    - name: Install dependencies
+      run: |
+        npm install
+
+    - name: Lint files
+      run: |
+        npm run lint
