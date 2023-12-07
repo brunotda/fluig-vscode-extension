@@ -1,51 +1,49 @@
 name: Test CI
-'on':
+
+on:
   pull_request:
     branches:
-        - main
-        - test
+      - main
+      - test
+
 jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+
+      - name: Install Yarn
+        run: npm install -g yarn
+
+      - name: Install Dependencies
+        run: yarn install --ignore-engines
+
   danger-ci:
     name: Danger CI
+    needs: install
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v1
-        with:
-          node-version: 14.x
-        env:
-          RUNNER_TEMP: /tmp
-      - name: yarn install
-        run: yarn install --ignore-engines
       - name: Run Changelog CI
         uses: saadmk11/changelog-ci@v1.1.2
+
   lint:
     name: Lint
+    needs: install
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v1
-        with:
-          node-version: 14.x
-        env:
-          RUNNER_TEMP: /tmp
-      - name: yarn install
-        run: yarn install --ignore-engines
       - name: Lint project
-        run: |
-            yarn lint
+        run: yarn lint
+
   test:
     name: Test
+    needs: install
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v1
-        with:
-          node-version: 14.x
-        env:
-          RUNNER_TEMP: /tmp
-      - name: yarn install
-        run: yarn install --ignore-engines
       - name: Run test
-        run: |
-            yarn test
+        run: yarn test
