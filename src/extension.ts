@@ -22,6 +22,6 @@ export function activate(context: vscode.ExtensionContext) {
     GlobalEventExtension.activate(context);
     ServerExtension.activate(context);
 }
-
+//teste
 export function deactivate() {
 }
