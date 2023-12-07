@@ -18,11 +18,8 @@ jobs:
         with:
           node-version: '14'
 
-      - name: Install Yarn
-        run: npm install -g yarn
-
       - name: Install Dependencies
-        run: yarn install --ignore-engines
+        run: npm install --ignore-engines
 
   danger-ci:
     name: Danger CI
@@ -38,7 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Lint project
-        run: yarn lint
+        run: npm run lint
 
   test:
     name: Test
@@ -46,4 +43,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Run test
-        run: yarn test
+        run: npm test
