@@ -19,11 +19,17 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '14'
-
+      - name: Cache dependencies
+        uses: actions/cache@v1
+        with:
+          path: ./node\_modules
+          key: ${{ runner.OS }}-dependencies-${{ hashFiles('\*\*/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-dependencies-${{ env.cache-name }}-
+            ${{ runner.OS }}-dependencies-
+            ${{ runner.OS }}-
       - name: Install Dependencies
         run: npm install
-        working-directory: .
-
   danger-ci:
     name: Danger CI
     needs: install
@@ -39,13 +45,10 @@ jobs:
     steps:
       - name: Lint project
         run: npm run lint
-        working-directory: .
-
   test:
     name: Test
     needs: install
     runs-on: ubuntu-latest
     steps:
       - name: Run test
-        run: npm test
-        working-directory: .
+        run: npm run test
