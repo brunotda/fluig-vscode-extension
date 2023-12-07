@@ -10,7 +10,7 @@ jobs:
     name: Lint source code
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Setup Node
       uses: actions/setup-node@v3
@@ -34,3 +34,31 @@ jobs:
     - name: Lint files
       run: |
         npm run lint
+  code-test:
+    name: Test code
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup Node
+      uses: actions/setup-node@v3
+      with:
+        node-version: '14'
+
+    - name: Cache dependencies
+      uses: actions/cache@v3.3.2
+      with:
+        path: ./node\_modules
+        key: ${{ runner.OS }}-dependencies-${{ hashFiles('\*\*/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.OS }}-dependencies-${{ env.cache-name }}-
+          ${{ runner.OS }}-dependencies-
+          ${{ runner.OS }}-
+
+    - name: Install dependencies
+      run: |
+        npm install
+
+    - name: Test code
+      run: |
+        npm run test
