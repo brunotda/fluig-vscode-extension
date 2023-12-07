@@ -23,7 +23,7 @@ jobs:
 
       - name: Install Dependencies
         run: npm install
-        working-directory: path/to/project
+        working-directory: ./path/to/project
 
   danger-ci:
     name: Danger CI
@@ -40,7 +40,7 @@ jobs:
     steps:
       - name: Lint project
         run: npm run lint
-        working-directory: path/to/project
+        working-directory: ./path/to/project
 
   test:
     name: Test
@@ -49,4 +49,4 @@ jobs:
     steps:
       - name: Run test
         run: npm test
-        working-directory: path/to/project
+        working-directory: ./path/to/project
