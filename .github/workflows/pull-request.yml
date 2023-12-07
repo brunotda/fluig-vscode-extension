@@ -12,15 +12,18 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
+        with:
+          clean: true
+          path: path/to/project
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '14'
-        env:
-          RUNNER_TEMP: /tmp
+
       - name: Install Dependencies
-        run: npm install --ignore-engines
+        run: npm install
+        working-directory: path/to/project
 
   danger-ci:
     name: Danger CI
@@ -37,6 +40,7 @@ jobs:
     steps:
       - name: Lint project
         run: npm run lint
+        working-directory: path/to/project
 
   test:
     name: Test
@@ -45,3 +49,4 @@ jobs:
     steps:
       - name: Run test
         run: npm test
+        working-directory: path/to/project
